@@ -1,33 +1,22 @@
 from flask import Flask, jsonify
 from pantry.models.food import Food
-from pantry.db import Base, engine
+from pantry.db import engine, init_db
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session
 import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 
-# create the db
-Base.metadata.create_all(engine)
-
-Session = sessionmaker(bind=engine)
-session = Session()
-
-def create_seed():
-    session.add_all([
-        Food(name='apple', amount=3),
-        Food(name='banana', amount=4),
-    ])
-    session.commit()
-
-# if seed data isn't in db, create it
-if session.query(Food).count() < 0:
-    create_seed()
+init_db()
 
 @app.route('/food', methods=['GET'])
 def list_food():
+    session_factory = sessionmaker(bind=engine)
+    Session = scoped_session(session_factory)
+    session = Session()
+
     child = items = []
-    # import ipdb; ipdb.set_trace()
     for food in session.query(Food):
         item = {
             "_id": food.id,
@@ -42,4 +31,4 @@ def list_food():
     return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
