@@ -27,7 +27,7 @@ if session.query(Food).count() < 0:
 @app.route('/food', methods=['GET'])
 def list_food():
     child = items = []
-    import ipdb; ipdb.set_trace()
+    # import ipdb; ipdb.set_trace()
     for food in session.query(Food):
         item = {
             "_id": food.id,
@@ -42,4 +42,4 @@ def list_food():
     return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
