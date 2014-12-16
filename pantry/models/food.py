@@ -1,11 +1,12 @@
-from pantry.db import db
+from pantry.db import Base
+from sqlalchemy import Column, Integer, String
 
-class Food(db.Model):
+class Food(Base):
     __tablename__ = 'food'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    amount = db.Column(db.Integer, unique=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(80), unique=True)
+    amount = Column(Integer, unique=False)
 
     def __repr__(self):
         return '<Food %r>' % self.name

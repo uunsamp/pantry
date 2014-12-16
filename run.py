@@ -1,15 +1,17 @@
 from flask import Flask, jsonify
 from pantry.models.food import Food
-from pantry.db import db
+from pantry.db import create_db
 import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+create_db()
 db.init_app(app)
 
 @app.route('/food', methods=['GET'])
 def list_food():
     child = items = []
+    import ipdb; ipdb.set_trace()
     for food in Food.query.all():
         item = {
             "_id": food.id,
