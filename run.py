@@ -1,23 +1,19 @@
 from flask import Flask, jsonify
 from pantry.models.food import Food
-from pantry.db import engine, init_db
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import scoped_session
+from pantry.db import db
 import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+db.init_app(app)
 
-init_db()
+# error occurs here, see https://gist.github.com/uunsamp/b030f8f7ba2509e33d8f
+db.create_all()
 
 @app.route('/food', methods=['GET'])
 def list_food():
-    session_factory = sessionmaker(bind=engine)
-    Session = scoped_session(session_factory)
-    session = Session()
-
     child = items = []
-    for food in session.query(Food):
+    for food in Food.query.all():
         item = {
             "_id": food.id,
             "name": food.name,

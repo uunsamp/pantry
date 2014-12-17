@@ -1,14 +1,16 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String
+from pantry.db import db
 
-Base = declarative_base()
+class Food(db.Model):
 
-class Food(Base):
-    __tablename__ = 'food'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    amount = db.Column(db.Integer, unique=False)
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(80), unique=True)
-    amount = Column(Integer, unique=False)
+    def __init__(self, app):
 
-    def __repr__(self):
-        return '<Food %r>' % self.name
+        def __init__(self, name, amount):
+            self.name = name
+            self.amount = amount
+
+        def __repr__(self):
+            return '<Food %r>' % self.name
