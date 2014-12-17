@@ -1,14 +1,10 @@
 from flask import Flask, jsonify
 from pantry.models.food import Food
 from pantry.db import db
+from pantry.app import create_app
 import json
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-db.init_app(app)
-
-# error occurs here, see https://gist.github.com/uunsamp/b030f8f7ba2509e33d8f
-db.create_all()
+app = create_app()
 
 @app.route('/food', methods=['GET'])
 def list_food():
